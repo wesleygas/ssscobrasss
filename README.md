@@ -7,11 +7,10 @@ sssRepositório da linguagem maisss sssensacional que qualquer cobra já viuzzz
 assignment = NAME "=" string | digito | NAME | expr ";"
 
 comparison: expr (comp_op expr)*
-comp_op: '<'|'>'|'=='|'>='|'<='|'!='|'in'|'not'
+comp_op: '<'|'>'|'=='|'!'
 expr: term (('+'|'-') term)*
-term: factor (('*'|'/'|'%'|'//') factor)*
-factor: ('+'|'-') factor | power
-power: atom ['**' factor]
+term: factor (('*'|'/'|'%') factor)*
+factor: ('+'|'-') factor | atom
 atom: (NAME | NUMBER | 'True' | 'False')
 
 
@@ -25,14 +24,13 @@ comparison: expr (comp_op expr)*
 
 
 #Funões e loops 
-while_stmt: 'while' test ':' suite ['else' ':' suite]
+while_stmt: 'while' test 'sss' suite 'zzz' ['else' 'sss' suite 'zzz']
 funcdef: 'def' NAME parameters 'sss' stmt+ 'zzz'
 
 parameters: '(' [argslist] ')'
-stmt: (expr | pass_stmt | return_stmt )
+stmt: (expr | return_stmt )
 
 return_stmt: 'return' argslist ';'
-pass_stmt: 'pass'
 
 suite: stmt | sss stmt+ zzz
 
