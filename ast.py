@@ -19,7 +19,7 @@ class Ident():
     def eval(self, st):
         return st.getSymbol(self.name).value
 
-class funcDef():
+class FuncDef():
     def __init__(self, name, argList, block):
         self.name = name
         self.argList = argList
@@ -28,7 +28,7 @@ class funcDef():
         func = FuncSymbol(self.name, self.argList, self.block)
         st.setSymbol(func)
 
-class funcCall():
+class FuncCall():
     def __init__(self, name, argList):
         self.name = name
         self.argList = argList
@@ -46,6 +46,25 @@ class funcCall():
 
         func.block.eval(funcSt) #run funcblock with local scope
 
+class WhileNode():
+    def __init__(self, condition, block):
+        self.condition = condition
+        self.block = block
+    def eval(self,st):
+        while(self.condition.eval(st)):
+            self.block.eval(st)
+
+class IfNode():
+    def __init__(self, condition, block_true, block_false = None):
+        self.condition = condition
+        self.block_true = block_true
+        self.block_false = block_false
+    def eval(self,st):
+        if(self.condition.eval(st)):
+            self.block_true.eval(st)
+        elif(self.block_false):
+            self.block_false.eval(st)
+        
 
 class UnOp():
     def __init__(self, child):
