@@ -38,5 +38,6 @@ argslist: NAME {',' NAME}
 
 NAME = letra {letra|digito}
 
+NUMBER = digito+
 
 ``` 
