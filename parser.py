@@ -1,7 +1,7 @@
 from rply import ParserGenerator
 from ast import Number, Sum, Sub, Print, Block, Ident, PowNode
-from ast import Positive, Negate, Mult, Div, Less, Greater, Equal
-from ast import Assign, ReturnNode, NoOp
+from ast import Positive, Invert, Mult, Div, Less, Greater, Equal
+from ast import Assign, ReturnNode, NoOp, Negate, And, Or
 import lexer
 
 class Parser():
@@ -27,7 +27,7 @@ class Parser():
 
         #@self.pg.production('stmt : if_stmt')
         #@self.pg.production('stmt : return_stmt')
-        @self.pg.production('stmt : comp')
+        @self.pg.production('stmt : test')
         @self.pg.production('stmt : print')
         @self.pg.production('stmt : assignment')
         def p_stmt(tokens):
@@ -38,7 +38,7 @@ class Parser():
         #    return
 
 
-        #@self.pg.production('return_stmt : RETURN comp')
+        #@self.pg.production('return_stmt : RETURN test')
         #def p_return_stmt(tokens):
         #    return ReturnNode(tokens[1])
 
@@ -46,13 +46,13 @@ class Parser():
         #def p_mono_return_stmt(tokens):
         #    return ReturnNode(NoOp())
 
-        @self.pg.production('assignment : NAME EQUAL comp')
+        @self.pg.production('assignment : NAME EQUAL test')
         def p_assignment(tokens):
             left = tokens[0].getstr()
             right = tokens[2] 
             return Assign(left, right)
 
-        @self.pg.production('print : PRINT LPAR comp RPAR')
+        @self.pg.production('print : PRINT LPAR test RPAR')
         def p_print(tokens):
             return Print(tokens[2])
         
@@ -83,7 +83,7 @@ class Parser():
             if(sign == 'PLUS'):
                 return Positive(symb)
             elif(sign == 'MINUS'):
-                return Negate(symb)
+                return Invert(symb)
             else:
                 raise Exception(f"{tokens} passaram liso")
 
@@ -144,10 +144,41 @@ class Parser():
         def p_mono_comp(tokens):
             return tokens[0]
 
+        @self.pg.production('not_test : NOT not_test')
+        def p_not_test(tokens):
+            return Negate(tokens[1])
+
+        @self.pg.production('not_test : comp')
+        def p_mono_not_test(tokens):
+            return tokens[0]
+
+          
+        @self.pg.production('and_test : not_test  AND  not_test')
+        @self.pg.production('and_test : and_test  AND  not_test')
+        def p_and_test(tokens):
+            return And(tokens[0], tokens[2])
+
+        @self.pg.production('and_test : not_test')
+        def p_mono_and_test(tokens):
+            return tokens[0]
+
+        @self.pg.production('or_test : and_test  OR  and_test')
+        @self.pg.production('or_test : or_test  OR  and_test')
+        def p_or_test(tokens):
+            return Or(tokens[0], tokens[2])
+
+        @self.pg.production('or_test : and_test')
+        def p_mono_or_test(tokens):
+            return tokens[0]
         
-        @self.pg.error
-        def error_handle(token):
-            raise ValueError("Ran into a %s where it wasn't expected" % token.gettokentype())
+        @self.pg.production('test : or_test')
+        def p_mono_test(tokens):
+            return tokens[0]
+
+        
+        #@self.pg.error
+        #def error_handle(token):
+        #    raise ValueError("Ran into a %s where it wasn't expected" % token.gettokentype())
     
     def getParser(self):
         return self.pg.build()

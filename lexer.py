@@ -28,6 +28,8 @@ tokenDict = {
     'EQEQUAL': r'\=\=',
     'EQUAL': r'\=',
     'NOT': r'\!', #lembrando q o not eh igual a c pq sim
+    'AND': r'\&\&',
+    'OR' : r'\|\|',
 }
 
 class Lexer():

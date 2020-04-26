@@ -123,6 +123,14 @@ class Less(BinOp):
     def eval(self,st):
         return int(self.left.eval(st) < self.right.eval(st))
 
+class Or(BinOp):
+    def eval(self,st):
+        return int(self.left.eval(st) or self.right.eval(st))
+
+class And(BinOp):
+    def eval(self,st):
+        return int(self.left.eval(st) and self.right.eval(st))
+
 class Assign(BinOp):
     def eval(self, st):
         symbol = IdentSymbol(self.left, self.right.eval(st))
@@ -136,9 +144,13 @@ class Print(UnOp):
     def eval(self, st):
         print(self.child.eval(st))
 
-class Negate(UnOp):
+class Invert(UnOp):
     def eval(self,st):
         return -int(self.child.eval(st))
+
+class Negate(UnOp):
+    def eval(self,st):
+        return int(not self.child.eval(st))
 
 class Positive(UnOp):
     def eval(self,st):
