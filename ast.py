@@ -1,16 +1,26 @@
 from symboltable import IdentSymbol, FuncSymbol, SymbolTable
 
+#Special/specific nodes
+
 class Number():
     def __init__(self, value):
         self.value = value
     def eval(self, st):
         return int(self.value)
 
+class ReturnNode():
+    def __init__(self, child):
+        self.child = child
+    def eval(self,st):
+        return self.child.eval(st)
+
 class Block():
     def __init__(self):
         self.childs = []
     def eval(self, st):
         for child in self.childs:
+            if type(child) == ReturnNode:
+                return child.eval(st)
             child.eval(st)
 
 class Ident():
@@ -18,6 +28,8 @@ class Ident():
         self.name = name
     def eval(self, st):
         return st.getSymbol(self.name).value
+
+
 
 class FuncDef():
     def __init__(self, name, argList, block):
@@ -46,6 +58,8 @@ class FuncCall():
 
         func.block.eval(funcSt) #run funcblock with local scope
 
+
+
 class WhileNode():
     def __init__(self, condition, block):
         self.condition = condition
@@ -66,6 +80,7 @@ class IfNode():
             self.block_false.eval(st)
         
 
+#Base nodes
 class UnOp():
     def __init__(self, child):
         self.child = child
@@ -94,7 +109,7 @@ class Mult(BinOp):
     def eval(self,st):
         return int(self.left.eval(st) * self.right.eval(st))
 
-class Pow(BinOp):
+class PowNode(BinOp):
     def eval(self,st):
         return int(self.left.eval(st) ** self.right.eval(st))
 

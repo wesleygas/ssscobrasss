@@ -4,14 +4,17 @@ sssRepositório da linguagem maisss sssensacional que qualquer cobra já viuzzz
 
 ```EBNF
 
-assignment = NAME "=" string | digito | NAME | expr ";"
+program: stmt*
+
+assignment = NAME "=" digito | NAME | expr
 
 comparison: expr (comp_op expr)*
-comp_op: '<'|'>'|'=='|'!'
+comp_op: '<'|'>'|'=='
 expr: term (('+'|'-') term)*
-term: factor (('*'|'/'|'%') factor)*
-factor: ('+'|'-') factor | atom
-atom: (NAME | NUMBER | 'True' | 'False')
+term: factor (('*'|'/') factor)*
+factor: ('+'|'-') factor | power
+power: atom ['**' factor]
+atom: (NAME | NUMBER)
 
 
 
@@ -19,8 +22,7 @@ if_stmt: 'if' test 'sss' suite 'zzz' ('elif' test 'sss' suite 'zzz')* ['else' 's
 test: or_test
 or_test: and_test ('or' and_test)*
 and_test: not_test ('and' not_test)*
-not_test: 'not' not_test | comparison
-comparison: expr (comp_op expr)*
+not_test: '!' not_test | comparison
 
 
 #Funões e loops 
@@ -28,15 +30,15 @@ while_stmt: 'while' test 'sss' suite 'zzz' ['else' 'sss' suite 'zzz']
 funcdef: 'def' NAME parameters 'sss' stmt+ 'zzz'
 
 parameters: '(' [argslist] ')'
-stmt: (expr | return_stmt )
+stmt: (expr | return_stmt | while_stmt | if_stmt | assignment)
 
-return_stmt: 'return' argslist ';'
+return_stmt: 'return' NUMBER | argslist
 
-suite: stmt | sss stmt+ zzz
+suite:  stmt+
 
-argslist: NAME {',' NAME}
+argslist: NAME (',' NAME)*
 
-NAME = letra {letra|digito}
+NAME = letra (letra|digito)*
 
 NUMBER = digito+
 

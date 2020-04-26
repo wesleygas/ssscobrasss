@@ -19,6 +19,7 @@ tokenDict = {
     'SEMI':r'\;',
     'PLUS':r'\+',
     'MINUS':r'\-',
+    'STARSTAR': r'\*\*',
     'STAR': r'\*',
     'SLASH': r'\/',
     'LESS': r'\<',
