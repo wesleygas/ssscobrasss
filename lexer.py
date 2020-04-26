@@ -4,6 +4,7 @@ import re
 tokenDict = {
     'PRINT': r'print',
     'WHILE': r'while',
+    'RETURN': r'return',
     'DEF':r'def',
     'IF': r'if',
     'ELIF': r'elif',

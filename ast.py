@@ -8,15 +8,14 @@ class Number():
     def eval(self, st):
         return int(self.value)
 
-class ReturnNode():
-    def __init__(self, child):
-        self.child = child
-    def eval(self,st):
-        return self.child.eval(st)
 
-class Block():
-    def __init__(self):
-        self.childs = []
+
+class Block(): 
+    def __init__(self, firstborn):
+        self.childs = [firstborn]
+
+    def addChild(self, child):
+        self.childs.append(child)
     def eval(self, st):
         for child in self.childs:
             if type(child) == ReturnNode:
@@ -76,7 +75,7 @@ class IfNode():
     def eval(self,st):
         if(self.condition.eval(st)):
             self.block_true.eval(st)
-        elif(self.block_false):
+        elif(not (self.block_false) is None):
             self.block_false.eval(st)
         
 
@@ -89,7 +88,6 @@ class BinOp():
     def __init__(self, left, right):
         self.left = left
         self.right = right
-
 
 #Binops
 
@@ -127,7 +125,7 @@ class Less(BinOp):
 
 class Assign(BinOp):
     def eval(self, st):
-        symbol = IdentSymbol(self.left.name, self.right.eval(st))
+        symbol = IdentSymbol(self.left, self.right.eval(st))
         st.setSymbol(symbol)
 
 
@@ -146,3 +144,10 @@ class Positive(UnOp):
     def eval(self,st):
         return +int(self.child.eval(st))
 
+class ReturnNode(UnOp):
+    def eval(self,st):
+        return self.child.eval(st)
+
+class NoOp():
+    def eval(self, st):
+        pass

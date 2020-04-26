@@ -11,5 +11,6 @@ pg = Parser()
 pg.parse()
 parser = pg.getParser()
 st = SymbolTable(name='root')
-parser.parse(tokens).eval(st)
+ast = parser.parse(tokens)
+ast.eval(st)
 
