@@ -2,6 +2,7 @@ from rply import ParserGenerator
 from ast import Number, Sum, Sub, Print, Block, Ident, PowNode
 from ast import Positive, Invert, Mult, Div, Less, Greater, Equal
 from ast import Assign, ReturnNode, NoOp, Negate, And, Or
+from ast import IfNode, WhileNode
 import lexer
 
 class Parser():
@@ -25,18 +26,35 @@ class Parser():
         def p_first_block(tokens):
             return Block(tokens[0])
 
-        #@self.pg.production('stmt : if_stmt')
-        #@self.pg.production('stmt : return_stmt')
-        @self.pg.production('stmt : test')
+        
         @self.pg.production('stmt : print')
         @self.pg.production('stmt : assignment')
+        @self.pg.production('stmt : if_stmt')
+        @self.pg.production('stmt : while_stmt')
+        #@self.pg.production('stmt : return_stmt')
+        @self.pg.production('stmt : test')
         def p_stmt(tokens):
             return tokens[0]
 
-        #@self.pg.production('if_stmt : IF test SBLK suit ZBLK')
-        #def p_if_stmt(tokens):
-        #    return
+        @self.pg.production('while_stmt : WHILE test SBLK block ZBLK')
+        def p_if_stmt(tokens):
+            condition = tokens[1]
+            blocktrue = tokens[3]
+            return WhileNode(condition, blocktrue)
+        
 
+        @self.pg.production('if_stmt : IF test SBLK block ZBLK')
+        def p_if_stmt(tokens):
+            condition = tokens[1]
+            blocktrue = tokens[3]
+            return IfNode(condition, blocktrue)
+        
+        @self.pg.production('if_stmt : IF test SBLK block ZBLK ELSE SBLK block ZBLK')
+        def p_ifelse_stmt(tokens):
+            condition = tokens[1]
+            blocktrue = tokens[3]
+            blockfalse = tokens[7]
+            return IfNode(condition, blocktrue, blockfalse)
 
         #@self.pg.production('return_stmt : RETURN test')
         #def p_return_stmt(tokens):
@@ -176,9 +194,9 @@ class Parser():
             return tokens[0]
 
         
-        #@self.pg.error
-        #def error_handle(token):
-        #    raise ValueError("Ran into a %s where it wasn't expected" % token.gettokentype())
+        @self.pg.error
+        def error_handle(token):
+            raise ValueError("Ran into a %s in where it wasn't expected" % token.gettokentype())
     
     def getParser(self):
         return self.pg.build()

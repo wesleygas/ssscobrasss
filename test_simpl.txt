@@ -1,1 +1,15 @@
-print(5**2+3)
+a = 1
+b = 0
+
+
+
+if a||b sss
+ print(10)
+zzz else sss
+ print(-10)
+zzz
+
+while b < 5*a sss
+ b = b+1
+ print(b)
+zzz 

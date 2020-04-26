@@ -7,7 +7,7 @@ tokenDict = {
     'RETURN': r'return',
     'DEF':r'def',
     'IF': r'if',
-    'ELIF': r'elif',
+    #'ELIF': r'elif',
     'ELSE': r'else',
     'RETURN': r'return',
     'NUMBER': r'\d+',
