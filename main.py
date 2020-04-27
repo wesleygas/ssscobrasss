@@ -6,7 +6,6 @@ with open('test_simpl.txt') as f:
 
 lexer = Lexer().get_lexer()
 tokens = lexer.lex(entrada)
-
 pg = Parser()
 pg.parse()
 parser = pg.getParser()

@@ -2,7 +2,7 @@ from rply import ParserGenerator
 from ast import Number, Sum, Sub, Print, Block, Ident, PowNode
 from ast import Positive, Invert, Mult, Div, Less, Greater, Equal
 from ast import Assign, ReturnNode, NoOp, Negate, And, Or
-from ast import IfNode, WhileNode
+from ast import IfNode, WhileNode, FuncCall, FuncDef, ArgList, Program
 import lexer
 
 class Parser():
@@ -17,6 +17,15 @@ class Parser():
 
     def parse(self):
 
+        @self.pg.production('program : program block')
+        def p_program(tokens):
+            tokens[0].addChild(tokens[1])
+            return tokens[0]
+        
+        @self.pg.production('program : block')
+        def p_first_program(tokens):
+            return Program(tokens[0])
+
         @self.pg.production('block : block stmt')
         def p_block(tokens):
             tokens[0].addChild(tokens[1])
@@ -26,18 +35,54 @@ class Parser():
         def p_first_block(tokens):
             return Block(tokens[0])
 
+        @self.pg.production('funccall : NAME LPAR callargs RPAR')
+        def p_funccall(tokens):
+            return FuncCall(tokens[0].getstr(), tokens[2].getArgs())
+
+        @self.pg.production('funccall : NAME LPAR RPAR')
+        def p_mono_funccall(tokens):
+            return FuncCall(tokens[0].getstr(),[])
+
+        @self.pg.production('callargs : callargs COMMA test')
+        def p_callargs(tokens):
+            tokens[0].addChild(tokens[2])
+            return tokens[0]
+
+        @self.pg.production('callargs : test')
+        def p_mono_callargs(tokens):
+            return ArgList(tokens[0])
         
+        @self.pg.production('funcdef : DEF NAME LPAR defargs RPAR SBLK block ZBLK')
+        def p_funcdef(tokens):
+            return FuncDef(tokens[1].getstr(),tokens[3].getArgs(),tokens[6])
+        
+        @self.pg.production('funcdef : DEF NAME LPAR RPAR SBLK block ZBLK')
+        def p_mono_funcdef(tokens):
+            return FuncDef(tokens[1].getstr(),[],tokens[5])
+            
+
+        @self.pg.production('defargs : defargs COMMA NAME')
+        def p_defargs(tokens):
+            tokens[0].addChild(tokens[2].getstr())
+            return tokens[0]
+
+        @self.pg.production('defargs : NAME')
+        def p_mono_defargs(tokens):
+            return ArgList(tokens[0].getstr())
+        
+        
+        @self.pg.production('stmt : funcdef')
         @self.pg.production('stmt : print')
         @self.pg.production('stmt : assignment')
         @self.pg.production('stmt : if_stmt')
         @self.pg.production('stmt : while_stmt')
-        #@self.pg.production('stmt : return_stmt')
+        @self.pg.production('stmt : return_stmt')
         @self.pg.production('stmt : test')
         def p_stmt(tokens):
             return tokens[0]
 
         @self.pg.production('while_stmt : WHILE test SBLK block ZBLK')
-        def p_if_stmt(tokens):
+        def p_while_stmt(tokens):
             condition = tokens[1]
             blocktrue = tokens[3]
             return WhileNode(condition, blocktrue)
@@ -56,13 +101,13 @@ class Parser():
             blockfalse = tokens[7]
             return IfNode(condition, blocktrue, blockfalse)
 
-        #@self.pg.production('return_stmt : RETURN test')
-        #def p_return_stmt(tokens):
-        #    return ReturnNode(tokens[1])
+        @self.pg.production('return_stmt : RETURN test')
+        def p_return_stmt(tokens):
+            return ReturnNode(tokens[1])
 
-        #@self.pg.production('return_stmt : RETURN')
-        #def p_mono_return_stmt(tokens):
-        #    return ReturnNode(NoOp())
+        @self.pg.production('return_stmt : RETURN')
+        def p_mono_return_stmt(tokens):
+            return ReturnNode(NoOp())
 
         @self.pg.production('assignment : NAME EQUAL test')
         def p_assignment(tokens):
@@ -82,6 +127,11 @@ class Parser():
                 return Number(int(token.getstr()))
             elif(token.gettokentype() == 'NAME'):
                 return Ident(token.getstr())
+        
+        @self.pg.production('atom : funccall')
+        def p_func_atom(tokens):
+            return tokens[0]
+        
 
         @self.pg.production('power : atom')        
         def p_mono_power(tokens):
@@ -199,6 +249,4 @@ class Parser():
             raise ValueError("Ran into a %s in where it wasn't expected" % token.gettokentype())
     
     def getParser(self):
-        return self.pg.build()
-
-                
+        return self.pg.build()           

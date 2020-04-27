@@ -4,7 +4,6 @@ import re
 tokenDict = {
     'PRINT': r'print',
     'WHILE': r'while',
-    'RETURN': r'return',
     'DEF':r'def',
     'IF': r'if',
     #'ELIF': r'elif',
@@ -17,7 +16,7 @@ tokenDict = {
     'ZBLK': r'zzz',
     'NAME': r'[a-z]\w*',
     'COMMA':r'\,',
-    'SEMI':r'\;',
+    #'SEMI':r'\;',
     'PLUS':r'\+',
     'MINUS':r'\-',
     'STARSTAR': r'\*\*',

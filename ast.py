@@ -8,7 +8,26 @@ class Number():
     def eval(self, st):
         return int(self.value)
 
+class ArgList():
+    #Recebe NAMES
+    def __init__(self, firstborn):
+        self.childs = [firstborn]
+    def addChild(self, child):
+        self.childs.append(child)
+    def getArgs(self):
+        return self.childs
 
+class Program(): 
+    def __init__(self, firstborn):
+        self.childs = [firstborn]
+
+    def addChild(self, child):
+        self.childs.append(child)
+    def eval(self, st):
+        for child in self.childs:
+            if type(child) == ReturnNode:
+                raise Exception("Return fora de uma func")
+            child.eval(st)
 
 class Block(): 
     def __init__(self, firstborn):
@@ -19,8 +38,10 @@ class Block():
     def eval(self, st):
         for child in self.childs:
             if type(child) == ReturnNode:
-                return child.eval(st)
-            child.eval(st)
+                return child
+            result = child.eval(st)
+            if(type(result) == ReturnNode):
+                return result
 
 class Ident():
     def __init__(self, name):
@@ -52,10 +73,13 @@ class FuncCall():
 
         for i in range(len(func.argList)):  #copy args for local scope
             #                   Arg name       , arg value
-            symb = IdentSymbol(func.argList[i],self.argList[i].eval())
+            symb = IdentSymbol(func.argList[i],self.argList[i].eval(st))
             funcSt.setSymbol(symb)
-
-        func.block.eval(funcSt) #run funcblock with local scope
+        
+        result = func.block.eval(funcSt) #run funcblock with local scope
+        
+        if(not result is None): 
+            return result.eval(funcSt)
 
 
 
@@ -64,8 +88,11 @@ class WhileNode():
         self.condition = condition
         self.block = block
     def eval(self,st):
+        result = None
         while(self.condition.eval(st)):
-            self.block.eval(st)
+            result = self.block.eval(st)
+            if type(result) == ReturnNode:
+                return result
 
 class IfNode():
     def __init__(self, condition, block_true, block_false = None):
@@ -73,10 +100,13 @@ class IfNode():
         self.block_true = block_true
         self.block_false = block_false
     def eval(self,st):
+        result = None
         if(self.condition.eval(st)):
-            self.block_true.eval(st)
+            result = self.block_true.eval(st)
         elif(not (self.block_false) is None):
-            self.block_false.eval(st)
+            result = self.block_false.eval(st)
+        if type(result) == ReturnNode:
+            return result
         
 
 #Base nodes

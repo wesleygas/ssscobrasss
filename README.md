@@ -4,24 +4,27 @@ sssRepositório da linguagem maisss sssensacional que qualquer cobra já viuzzz
 
 ```EBNF
 
+program: block+
+block: stmt+
 
-block: stmt*
+funccall: NAME '(' [callargs] ')'
+callargs: test (',' test)*
 
-
-#Funões e loops 
-funcdef: 'def' NAME parameters 'sss' stmt+ 'zzz'
+funcdef: 'def' NAME '(' [defargs] ')' 'sss' block 'zzz'
 return_stmt: 'return' [test]
-parameters: '(' [argslist] ')'
+defargs: NAME (',' NAME)*
+
+
+stmt: (test | return_stmt | while_stmt | if_stmt | assignment | print )
 
 while_stmt: 'while' test 'sss' block 'zzz'
 
 if_stmt: 'if' test 'sss' block 'zzz' ['else' 'sss' block 'zzz'] 
 
-stmt: (test | return_stmt | while_stmt | if_stmt | assignment | print)
 
-assignment = NAME "=" test
+assignment : NAME "=" test
 
-print: '(' test ')' 
+print: 'print' '(' test ')' 
 
 test: or_test
 or_test: and_test ('||' and_test)*
@@ -33,12 +36,12 @@ expr: term (('+'|'-') term)*
 term: factor (('*'|'/') factor)*
 factor: ('+'|'-') factor | power
 power: atom ['**' factor]
-atom: (NAME | NUMBER)
+atom: (NAME | NUMBER | funccall)
 
-argslist: NAME (',' NAME)*
 
-NAME = letra (letra|digito)*
 
-NUMBER = digito+
+NAME : letra (letra|digito)*
+
+NUMBER : digito+
 
 ``` 

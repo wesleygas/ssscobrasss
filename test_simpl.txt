@@ -1,15 +1,14 @@
-a = 1
-b = 0
-
-
-
-if a||b sss
- print(10)
-zzz else sss
- print(-10)
+def fib(num)sss
+    if num < 2 sss
+        return num
+    zzz else sss
+        return fib(num-1) + fib(num-2)
+    zzz
 zzz
 
-while b < 5*a sss
- b = b+1
- print(b)
+a = 100
+i = 0
+while i < a sss
+    print(fib(i))
+    i = i+1
 zzz 
