@@ -6,7 +6,7 @@ def fib(num)sss
     zzz
 zzz
 
-a = 100
+a = 10
 i = 0
 while i < a sss
     print(fib(i))

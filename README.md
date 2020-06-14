@@ -1,6 +1,20 @@
 # ssscobrazzz
-sssRepositório da linguagem maisss sssensacional que qualquer cobra já viuzzz
 
+sssRepositório da linguagem maisss sssensacional que 
+qualquer cobra já viuzzz
+
+
+## Como usar
+
+python3 main.py ARQUIVO
+
+### Exemplos
+
+test_basic: prints, atribuição, funções (definição e chamada), aritmética
+
+test_med: Loop While, operações relacionais
+
+test_adv: recursao
 
 ```EBNF
 
@@ -35,7 +49,7 @@ comp: expr ('<'|'>'|'==' expr)*
 expr: term (('+'|'-') term)*
 term: factor (('*'|'/') factor)*
 factor: ('+'|'-') factor | power
-power: atom ['**' factor]
+power: atom ['**' factor] | '(' test ')'
 atom: (NAME | NUMBER | funccall)
 
 

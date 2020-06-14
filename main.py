@@ -1,7 +1,13 @@
 from lexer import Lexer
 from parser import Parser
 from symboltable import SymbolTable
-with open('test_simpl.txt') as f:
+import sys
+
+if(len(sys.argv) < 2):
+    raise Exception("You must provide a file to run.")
+
+
+with open(sys.argv[1]) as f:
     entrada = f.read()
 
 lexer = Lexer().get_lexer()

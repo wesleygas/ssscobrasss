@@ -159,6 +159,11 @@ class Parser():
         def p_mono_factor(tokens):
             return tokens[0]
         
+        #NEW AF
+        @self.pg.production('atom : LPAR test RPAR')
+        def p_factor_par(tokens):
+            return tokens[1]
+        
         @self.pg.production('term : factor STAR factor')
         @self.pg.production('term : factor SLASH factor')
         def p_term(tokens):

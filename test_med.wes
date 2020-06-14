@@ -1,0 +1,12 @@
+loga = 3
+logb = loga + 4
+
+print(loga > logb)
+
+while !(logb == loga) 
+sss
+    loga = loga + 1
+zzz
+
+print(loga)
+print(logb)
