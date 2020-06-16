@@ -8,13 +8,79 @@ qualquer cobra já viuzzz
 
 python3 main.py ARQUIVO
 
+### Inssspiração
+
+Qualquer semelhança com python definitivamente não é coincidência. A linguagem das cobras herda boa parte da sintaxe do primo, mas deixa de lado a necessidade de uma identação perfeita, usando o sssom preferido das cobrazzz como marcação de bloco. 
+
 ### Exemplos
 
 test_basic: prints, atribuição, funções (definição e chamada), aritmética
 
+``` 
+
+print(1)
+
+def worker(arg1,arg2)
+sss
+    print(arg1*arg2)
+    print(0)
+    print(arg1+arg2)
+    
+    return arg1/arg2
+zzz
+
+a = 10
+b = 4
+print(a**(b-1))
+print(worker(a,b))
+
+```
+
+
+
 test_med: Loop While, operações relacionais
 
+```
+
+loga = 3
+logb = loga + 4
+
+print(loga > logb)
+
+while !(logb == loga) 
+sss
+    loga = loga + 1
+zzz
+
+print(loga)
+print(logb)
+
+```
+
+
 test_adv: recursao
+
+```
+
+def fib(num)sss
+    if num < 2 sss
+        return num
+    zzz else sss
+        return fib(num-1) + fib(num-2)
+    zzz
+zzz
+
+a = 10
+i = 0
+while i < a sss
+    print(fib(i))
+    i = i+1
+zzz 
+
+``` 
+
+## Definição da EBNF
+
 
 ```EBNF
 
@@ -36,7 +102,7 @@ while_stmt: 'while' test 'sss' block 'zzz'
 if_stmt: 'if' test 'sss' block 'zzz' ['else' 'sss' block 'zzz'] 
 
 
-assignment : NAME "=" test
+assignment: NAME '=' test
 
 print: 'print' '(' test ')' 
 
