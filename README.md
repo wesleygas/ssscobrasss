@@ -71,10 +71,10 @@ def fib(num)sss
 zzz
 
 a = 10
-i = 0
-while i < a sss
-    print(fib(i))
-    i = i+1
+bad = 0
+while bad < a sss
+    print(fib(bad))
+    bad = bad+1
 zzz 
 
 ``` 
